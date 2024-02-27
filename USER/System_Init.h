@@ -23,7 +23,7 @@
 #define SOFTWARE_RESET_TIME 1000    // 切换固件后系统复位时间(ms) (建议1s，否则切换成功的回复包未发出系统就复位了)
 #define SYS_TIME 1                     // 系统定时时间(ms)
 #define KEY_CHECK_TIME 1          // 按键查询时间(ms)
-#define KEY_INTERVAL_TIME 2 // key定时器1ms查询一次，而有两个输出，所有每个按键实际检测间隔为2ms
+#define KEY_INTERVAL_TIME 2 // key定时器1ms查询一次，而有两个输出，所以每个按键实际检测间隔为2ms，如果多个输出则继续每一个输出加多1ms
 #define KEY_CLEAR_SHAKE_TIMME 20    // 按键消抖时间(ms)								/* 按键消抖时间 */
 #define BLE_CONNECT_BLINK_TIME 200	// 蓝牙连接时LED闪烁时间(ms)
 #define BLE_DISCONNECT_BLINK_TIME 500	// 蓝牙广播时LED闪烁时间(ms)

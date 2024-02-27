@@ -340,7 +340,7 @@ static void Key_Input_Scan(void)
 
     switch (Bsp_Key.current_enable_col_Status)
     {
-    case COL_0: // 当前是第0列
+    case COL_0: // 当前是检测第0列
     {
         /*第0列对应可以检测的按键是：上 中 下*/
         Key_Event_Scan(&KeyInfo_up, Bsp_Key.current_level_input_row0_Status);
@@ -348,7 +348,7 @@ static void Key_Input_Scan(void)
         Key_Event_Scan(&KeyInfo_Down, Bsp_Key.current_level_input_row2_Status);
         break;
     }
-    case COL_1: // 当前是第1列
+    case COL_1: // 当前是检测第1列
     {
         /*第1列对应可以检测的按键是：左 右 拍照*/
         Key_Event_Scan(&KeyInfo_Left, Bsp_Key.current_level_input_row0_Status);
@@ -370,20 +370,18 @@ static void Key_Output_Scan(void)
 {
     switch (Bsp_Key.current_enable_col_Status)
     {
-    case COL_0: // 当前是第0列
+    case COL_0:
     {
-        /*第0列输出高电平，其他列输出低电平*/
         io_write_pin(GPIO_PIN_OUTPUT_KEY0, PIN_SET);
         io_write_pin(GPIO_PIN_OUTPUT_KEY1, PIN_RESET);
-        Bsp_Key.current_enable_col_Status = COL_1;
+        Bsp_Key.current_enable_col_Status = COL_1;  // 检测第1列，其他列高电平
         break;
     }
-    case COL_1: // 当前是第1列
+    case COL_1:
     {
-        /*第1列输出高电平，其他列输出低电平*/
         io_write_pin(GPIO_PIN_OUTPUT_KEY0, PIN_RESET);
         io_write_pin(GPIO_PIN_OUTPUT_KEY1, PIN_SET);
-        Bsp_Key.current_enable_col_Status = COL_0;
+        Bsp_Key.current_enable_col_Status = COL_0; // 检测第0列，其他列高电平
         break;
     }
     default:
@@ -402,7 +400,7 @@ static uint8_t Key_Event_Scan(KeyInfo_st *keyInfo, PinState_et pin_status)
     /*------------------第一部分: 消抖事件 --------------------------*/
     if (_get_bit_value(keyInfo->start_signal, EVENT_KEY_PRESS_CLEAR_SHAKE)) // 若是按下按键消抖事件
     {
-        keyInfo->check_time += KEY_INTERVAL_TIME;
+        keyInfo->check_time += KEY_INTERVAL_TIME;   // 把实际检测的时间也加上
 
         if (keyInfo->check_time >= KEY_CLEAR_SHAKE_TIMME)   // 若消抖时间到达
         {
@@ -479,7 +477,7 @@ static uint8_t Key_Event_Scan(KeyInfo_st *keyInfo, PinState_et pin_status)
             LOG_I_Bsp_Key("5");
             return 0x06;
         }
-        else    // 一次按下事件
+        else    // 一次按下事件 
         {
             _set_bit_value(keyInfo->start_signal, EVENT_KEY_PRESS_CLEAR_SHAKE);   // 按下消抖事件置位
             LOG_I_Bsp_Key("6");
@@ -492,6 +490,7 @@ static uint8_t Key_Event_Scan(KeyInfo_st *keyInfo, PinState_et pin_status)
         {
             if (!_get_bit_value(keyInfo->start_signal, EVENT_KEY_CHECK_START))  // 若不是按键检查开始事件
             {
+                LOG_I_Bsp_Key("10");
                 return 0x01;    // 按键无操作
             }
             keyInfo->check_time += KEY_INTERVAL_TIME;   // 无操作下时间增加

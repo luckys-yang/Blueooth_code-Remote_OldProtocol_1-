@@ -71,7 +71,7 @@ typedef struct
 /*按键结构体*/
 typedef struct
 {
-    Key_ColNumber_et current_enable_col_Status;  // 当前正在使能的列(即1列输出高电平其他列输出低电平)
+    Key_ColNumber_et current_enable_col_Status;  // 当前正在使能的列(即1列输出低电平其他列输出高电平)
     PinState_et current_level_input_row0_Status;   // 当前Row0输入电平状态
     PinState_et current_level_input_row1_Status;   // 当前Row1输入电平状态
     PinState_et current_level_input_row2_Status;   // 当前Row2输入电平状态
